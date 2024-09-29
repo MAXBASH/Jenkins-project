@@ -14,8 +14,8 @@ pipeline {
         ACR_LOGIN_SERVER = 'jenkinsproj.azurecr.io'
         AKS_RESOURCE_GROUP = 'deakinuni'
         AKS_CLUSTER_NAME = 'jenkinsproj'
-        AZURE_CREDENTIALS_USR = 'odl_user_1402497@cloudlabs4deakin.onmicrosoft.com'
-        AZURE_CREDENTIALS_PSW = 'aavw46ZMM*4Y'
+        AZURE_CLIENT_SECRET = 'YLG8Q~Y~LUVmA-uStvPr.aQrGB-DmyylacOFpao8'
+        AZURE_CLIENT_ID = 'bc2645bd-f803-48cd-8cd2-8ffbb67ff391'
 
     }
 
@@ -66,7 +66,7 @@ pipeline {
                 script {
                     // Authenticate Azure CLI using the service principal
                     sh '''
-                    az login --service-principal -u $AZURE_CREDENTIALS_USR -p $AZURE_CREDENTIALS_PSW --tenant 2625129d-99a2-4df5-988e-5c5d07e7d0fb
+                    az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant 2625129d-99a2-4df5-988e-5c5d07e7d0fb
                     az account set --subscription c5271556-05d6-4365-8efa-9142945f2e32
                     '''
                 }
