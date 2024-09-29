@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-project
+  template:
+    metadata:
+      labels:
+        app: jenkins-project
+    spec:
+      containers:
+        - name: jenkins-project
+          image: jenkinsproj.azurecr.io/manoz3896/jenkins-project:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-project
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: jenkins-project
