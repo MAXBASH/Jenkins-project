@@ -4,7 +4,7 @@ pipeline {
     environment {
         JAVA_HOME = '/opt/homebrew/opt/openjdk@17'
         // PATH = "/usr/local/bin:$PATH"
-        PATH = "${JAVA_HOME}/bin:/usr/local/bin:$PATH"
+        PATH = "/opt/homebrew/bin:${JAVA_HOME}/bin:/usr/local/bin:$PATH"
         DOCKER_IMAGE = "manoz3896/jenkins-project:${BUILD_NUMBER}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         SONARQUBE_SCANNER = tool 'SonarQube-Scanner'
