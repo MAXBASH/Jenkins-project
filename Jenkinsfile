@@ -9,14 +9,6 @@ pipeline {
         SONARQUBE_SCANNER = tool 'SonarQube-Scanner'
         SONAR_HOST_URL = credentials('SONAR_HOST_URL')
         SONAR_LOGIN = credentials('sonarqube-token')
-        // ACR_NAME = 'jenkinsproj'
-        // ACR_LOGIN_SERVER = 'jenkinsproj.azurecr.io'
-        // AKS_RESOURCE_GROUP = 'deakinuni'
-        // AKS_CLUSTER_NAME = 'jenkinsproj'
-        // AZURE_CLIENT_SECRET = 'YLG8Q~Y~LUVmA-uStvPr.aQrGB-DmyylacOFpao8'
-        // AZURE_CLIENT_ID = 'bc2645bd-f803-48cd-8cd2-8ffbb67ff391'
-        // AZURE_TENANT_ID = '2625129d-99a2-4df5-988e-5c5d07e7d0fb'
-        // AZURE_SUBSCRIPTION_ID = 'c5271556-05d6-4365-8efa-9142945f2e32'
         ACR_NAME = credentials('ACR_NAME')
         ACR_LOGIN_SERVER = credentials('ACR_LOGIN_SERVER')
         AKS_RESOURCE_GROUP = credentials('AKS_RESOURCE_GROUP')
