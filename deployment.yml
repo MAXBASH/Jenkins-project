@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: jenkins-project
-          image: jenkinsproj.azurecr.io/manoz3896/jenkins-project:latest
+          image: jenkinsproj.azurecr.io/jenkins-project:latest
           ports:
             - containerPort: 3000
 ---

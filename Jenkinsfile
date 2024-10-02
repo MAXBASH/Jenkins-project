@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         JAVA_HOME = '/opt/homebrew/opt/openjdk@17'
-        // PATH = "/usr/local/bin:$PATH"
         PATH = "/opt/homebrew/bin:${JAVA_HOME}/bin:/usr/local/bin:$PATH"
         DOCKER_IMAGE = "manoz3896/jenkins-project:${BUILD_NUMBER}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
@@ -64,7 +63,6 @@ pipeline {
         stage('Login to Azure') {
             steps {
                 script {
-                    // Authenticate Azure CLI using the service principal
                     sh '''
                     az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant 2625129d-99a2-4df5-988e-5c5d07e7d0fb
                     az account set --subscription c5271556-05d6-4365-8efa-9142945f2e32
@@ -76,7 +74,6 @@ pipeline {
         stage('Push to Azure Container Registry') {
             steps {
                 script {
-                    // Tag the Docker image with ACR name
                     sh '''
                     docker tag $DOCKER_IMAGE $ACR_LOGIN_SERVER/$DOCKER_IMAGE
                     docker login $ACR_LOGIN_SERVER -u $(az acr credential show --name $ACR_NAME --query "username" -o tsv) -p $(az acr credential show --name $ACR_NAME --query "passwords[0].value" -o tsv)
@@ -89,7 +86,6 @@ pipeline {
         stage('Deploy to Azure Kubernetes Service (AKS)') {
             steps {
                 script {
-                    // Get AKS credentials and apply deployment
                     sh '''
                     az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
                     kubectl apply -f deployment.yml
