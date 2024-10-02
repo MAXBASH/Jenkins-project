@@ -90,7 +90,6 @@ pipeline {
                 script {
                     sh '''
                     az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
-                    kubectl set image deployment/jenkins-project jenkins-project=$ACR_LOGIN_SERVER/$DOCKER_IMAGE --record
                     kubectl apply -f deployment.yml
                     '''
                 }
