@@ -7,14 +7,24 @@ pipeline {
         DOCKER_IMAGE = "manoz3896/jenkins-project:${BUILD_NUMBER}"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         SONARQUBE_SCANNER = tool 'SonarQube-Scanner'
-        SONAR_HOST_URL = 'http://localhost:9000'
+        SONAR_HOST_URL = credentials('SONAR_HOST_URL')
         SONAR_LOGIN = credentials('sonarqube-token')
-        ACR_NAME = 'jenkinsproj'
-        ACR_LOGIN_SERVER = 'jenkinsproj.azurecr.io'
-        AKS_RESOURCE_GROUP = 'deakinuni'
-        AKS_CLUSTER_NAME = 'jenkinsproj'
-        AZURE_CLIENT_SECRET = 'YLG8Q~Y~LUVmA-uStvPr.aQrGB-DmyylacOFpao8'
-        AZURE_CLIENT_ID = 'bc2645bd-f803-48cd-8cd2-8ffbb67ff391'
+        // ACR_NAME = 'jenkinsproj'
+        // ACR_LOGIN_SERVER = 'jenkinsproj.azurecr.io'
+        // AKS_RESOURCE_GROUP = 'deakinuni'
+        // AKS_CLUSTER_NAME = 'jenkinsproj'
+        // AZURE_CLIENT_SECRET = 'YLG8Q~Y~LUVmA-uStvPr.aQrGB-DmyylacOFpao8'
+        // AZURE_CLIENT_ID = 'bc2645bd-f803-48cd-8cd2-8ffbb67ff391'
+        // AZURE_TENANT_ID = '2625129d-99a2-4df5-988e-5c5d07e7d0fb'
+        // AZURE_SUBSCRIPTION_ID = 'c5271556-05d6-4365-8efa-9142945f2e32'
+        ACR_NAME = credentials('ACR_NAME')
+        ACR_LOGIN_SERVER = credentials('ACR_LOGIN_SERVER')
+        AKS_RESOURCE_GROUP = credentials('AKS_RESOURCE_GROUP')
+        AKS_CLUSTER_NAME = credentials('AKS_CLUSTER_NAME')
+        AZURE_CLIENT_SECRET = credentials('AZURE_CLIENT_SECRET')
+        AZURE_CLIENT_ID = credentials('AZURE_CLIENT_ID')
+        AZURE_TENANT_ID = credentials('AZURE_TENANT_ID')
+        AZURE_SUBSCRIPTION_ID = credentials('AZURE_SUBSCRIPTION_ID')
 
     }
 
@@ -36,7 +46,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh 'docker build --platform linux/amd64 -t $DOCKER_IMAGE .'
             }
         }
 
@@ -64,8 +74,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant 2625129d-99a2-4df5-988e-5c5d07e7d0fb
-                    az account set --subscription c5271556-05d6-4365-8efa-9142945f2e32
+                    az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                    az account set --subscription $AZURE_SUBSCRIPTION_ID
                     '''
                 }
             }
@@ -88,6 +98,7 @@ pipeline {
                 script {
                     sh '''
                     az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME
+                    kubectl set image deployment/jenkins-project jenkins-project=$ACR_LOGIN_SERVER/$DOCKER_IMAGE --record
                     kubectl apply -f deployment.yml
                     '''
                 }
